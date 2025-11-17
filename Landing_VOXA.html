@@ -369,4 +369,300 @@
     
     // Simple state management for chat history
     let chatHistory = [];
-    chatHistory.push({ role: "model", text: "مرحباً Haider، أنا مساعدك الذكي M.A.K.E.R (Mentality & Knowledge Engine for والرؤية). كي
+    chatHistory.push({ role: "model", text: "مرحباً Haider، أنا مساعدك الذكي M.A.K.E.R (Mentality & Knowledge Engine for والرؤية). كيف يمكنني دعم رؤيتك اليوم؟" });
+
+
+    /* Helper function for custom modal */
+    function customAlert(message) {
+        const modalId = 'custom-modal';
+        let modal = document.getElementById(modalId);
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = modalId;
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(3, 7, 18, 0.9); z-index: 9999; 
+                display: flex; justify-content: center; align-items: center;
+            `;
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: var(--card-bg); border: 1px solid var(--accent); padding: 30px; 
+                border-radius: 10px; max-width: 90%; color: var(--text-color); text-align: center;
+                box-shadow: var(--accentGlow);
+            `;
+            const msg = document.createElement('p');
+            msg.style.marginBottom = '20px';
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'حسناً';
+            closeBtn.style.cssText = `
+                background: var(--accent); color: var(--bg); padding: 10px 20px; 
+                border-radius: 6px; font-weight: bold; cursor: pointer; transition: .3s;
+            `;
+            closeBtn.onclick = () => modal.remove();
+            
+            content.appendChild(msg);
+            content.appendChild(closeBtn);
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+        
+        const isLight = document.body.classList.contains('light');
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg');
+        
+        modal.style.backgroundColor = isLight ? 'rgba(0,0,0,0.5)' : 'rgba(3, 7, 18, 0.9)';
+        modal.querySelector('div').style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--card-bg');
+        modal.querySelector('div').style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+        modal.querySelector('div').style.borderColor = accentColor;
+        modal.querySelector('div').style.boxShadow = isLight ? '0 0 10px rgba(0,0,0,0.2)' : `0 0 20px ${accentColor}`;
+
+        modal.querySelector('button').style.backgroundColor = accentColor;
+        modal.querySelector('button').style.color = bgColor;
+        
+        modal.querySelector('p').textContent = message;
+        modal.style.display = 'flex';
+    }
+
+
+    /* ---------- PARTICLE FLOW (3D Background) - OPTIMIZED ---------- */
+    const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+    const PARTICLE_COUNT = 70; 
+    const CONNECTION_DISTANCE = 100; 
+    let w,h,particles=[],mouse={x:0,y:0};
+    function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}
+    addEventListener('resize',resize);resize();
+    class P{
+      constructor(){
+        this.x=Math.random()*w;this.y=Math.random()*h;
+        this.vx=(Math.random()-0.5)*.7;this.vy=(Math.random()-0.5)*.7;
+        this.r=Math.random()*1.5+1;
+      }
+      update(){
+        this.x+=this.vx;this.y+=this.vy;
+        if(this.x<0||this.x>w)this.vx*=-1;
+        if(this.y<0||this.y>h)this.vy*=-1;
+      }
+      draw(){
+        const isLight = document.body.classList.contains('light');
+        ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+        
+        if (isLight) {
+             ctx.fillStyle='rgba(0,0,0,.3)';
+             ctx.shadowBlur=0;
+        } else {
+             ctx.fillStyle='rgba(0,240,255,.6)'; 
+             ctx.shadowBlur=8;ctx.shadowColor='#00F0FF';
+        }
+        ctx.fill();
+      }
+    }
+    function init(){particles=[];for(let i=0;i<PARTICLE_COUNT;i++)particles.push(new P());}
+    function animate(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{p.update();p.draw();});
+      
+      const isLight = document.body.classList.contains('light');
+      
+      for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+          const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.hypot(dx,dy);
+          if(d<CONNECTION_DISTANCE){
+            ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
+            ctx.lineTo(particles[j].x,particles[j].y);
+            
+            const lineOpacity = 1 - d / CONNECTION_DISTANCE;
+            const lineColor = isLight ? 'rgba(100, 100, 100' : 'rgba(0,240,255';
+            ctx.strokeStyle=`${lineColor},${lineOpacity * 0.5})`; 
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    init();
+    
+    /* ---------- INIT AND HANDLERS ---------- */
+    window.onload = function() {
+        animate(); 
+        animateBars(); 
+        renderChatHistory(); 
+    }; 
+    addEventListener('mousemove',e=>{mouse.x=e.x;mouse.y=e.y;});
+
+    /* ---------- THEME TOGGLE FUNCTION ---------- */
+    function toggleTheme(){
+        document.body.classList.toggle('light');
+    }
+
+    /* ---------- VIEW SWITCHER ---------- */
+    function showView(v){
+      document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+      document.getElementById(v).classList.add('active');
+      if(v==='vision')animateBars();
+      
+      const main = document.querySelector('main');
+      window.scrollTo({
+          top: main.offsetTop,
+          behavior: 'smooth' 
+      });
+    }
+
+    /* ---------- PROGRESS BARS ---------- */
+    function animateBars(){
+      document.querySelectorAll('.bar span').forEach(bar=>{
+        const target=+bar.dataset.width;
+        setTimeout(()=>bar.style.width=target+'%',200);
+        
+        const label=bar.parentElement.parentElement.querySelector('label span:last-child');
+        let curr=0;const inc=target/60;
+        const counter=setInterval(()=>{
+          curr+=inc;if(curr>=target){curr=target;clearInterval(counter);}
+          label.textContent=Math.round(curr)+'%';
+        },20);
+      });
+    }
+
+    /* ---------- PASS CHECK & CONTACT FORM ---------- */
+    function checkPass(){
+      const val=document.getElementById('passKey').value.trim();
+      // The secret code
+      if(val==='127'){ 
+        document.getElementById('contactForm').style.display='block';
+        document.getElementById('passKey').value='';
+        customAlert('تم فتح بوابة الاتصال الحصري بنجاح. أهلاً بك.');
+      }else{
+        customAlert('رمز الوصول غير صحيح. يرجى المحاولة مرة أخرى.');
+        document.getElementById('passKey').value='';
+      }
+    }
+
+    function sendMessage(e){
+      e.preventDefault();
+      customAlert('تم استلام طلبك/رسالتك بنجاح. سيتم التواصل معك في أقرب وقت.');
+      e.target.reset();
+      if (e.target.closest('#contactForm')) {
+         e.target.closest('#contactForm').style.display = 'none';
+      }
+    }
+
+    /* ---------- AI CHAT IMPLEMENTATION (GEMINI API) V6 ---------- */
+
+    function renderChatHistory() {
+        const body = document.getElementById('chatBody');
+        body.innerHTML = '';
+        
+        chatHistory.forEach(msg => {
+            let content = msg.text;
+            let sourcesHTML = '';
+
+            if (msg.sources && msg.sources.length > 0) {
+                sourcesHTML += `<small>المصادر:`;
+                msg.sources.forEach((s, index) => {
+                    sourcesHTML += `<br><a href="${s.uri}" target="_blank">[${index + 1}] ${s.title}</a>`;
+                });
+                sourcesHTML += `</small>`;
+            }
+
+            if (msg.role === 'user') {
+                body.innerHTML += `<div class="msg-user"><b>أنت:</b> ${content}</div>`;
+            } else {
+                body.innerHTML += `<div class="msg-ai"><b>Gemini:</b> ${content} ${sourcesHTML}</div>`;
+            }
+        });
+        body.scrollTop = body.scrollHeight;
+    }
+
+    function toggleChat(){
+      const win=document.getElementById('chatWin');
+      win.style.display=win.style.display==='flex'?'none':'flex';
+    }
+    
+    async function askGemini(e){
+      e.preventDefault();
+      const inp=document.getElementById('chatInp');
+      const q=inp.value.trim();
+      if(!q) return;
+      
+      chatHistory.push({ role: "user", text: q });
+      inp.value='';
+      renderChatHistory();
+
+      const body = document.getElementById('chatBody');
+      const loadingMessageId = 'loading-temp';
+      body.innerHTML += `<div id="${loadingMessageId}" class="msg-ai" style="color: var(--accent); opacity: 1;"><b>Gemini:</b> جارٍ تحليل هدفك...</div>`;
+      body.scrollTop = body.scrollHeight;
+
+      let responseText = null;
+      let sources = [];
+
+      for (let i = 0; i < 3; i++) { 
+          try {
+              const payload = {
+                  contents: chatHistory.map(msg => ({ 
+                      role: msg.role === 'user' ? 'user' : 'model', 
+                      parts: [{ text: msg.text }] 
+                  })), 
+                  tools: [{ "google_search": {} }], 
+                  systemInstruction: {
+                      parts: [{ text: geminiSystemPrompt }]
+                  },
+              };
+
+              const response = await fetch(apiUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+              });
+
+              if (!response.ok) {
+                  if (response.status === 429 && i < 2) {
+                      const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                      await new Promise(resolve => setTimeout(resolve, delay));
+                      continue; 
+                  }
+                  throw new Error(`HTTP error! status: ${response.status}`);
+              }
+
+              const result = await response.json();
+              const candidate = result.candidates?.[0];
+
+              if (candidate && candidate.content?.parts?.[0]?.text) {
+                  responseText = candidate.content.parts[0].text;
+
+                  const groundingMetadata = candidate.groundingMetadata;
+                  if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                      sources = groundingMetadata.groundingAttributions
+                          .map(attribution => ({
+                              uri: attribution.web?.uri,
+                              title: attribution.web?.title,
+                          }))
+                          .filter(source => source.uri && source.title);
+                  }
+                  break; 
+              } else {
+                  throw new Error("Received an empty response from the model.");
+              }
+
+          } catch (error) {
+              console.error("Gemini API call failed:", error);
+              if (i === 2) {
+                  responseText = "عذراً، حدث خطأ أثناء الاتصال بالذكاء الاصطناعي. يرجى مراجعة اتصالك والمحاولة مجدداً.";
+              }
+          }
+      }
+
+      document.getElementById(loadingMessageId)?.remove();
+      
+      const finalResponse = { 
+          role: "model", 
+          text: responseText, 
+          sources: sources 
+      };
+      chatHistory.push(finalResponse);
+
+      renderChatHistory();
+    }
+  </script>
+</body>
+</html>
