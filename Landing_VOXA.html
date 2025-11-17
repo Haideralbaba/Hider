@@ -1,343 +1,372 @@
 <!DOCTYPE html>
-<html lang="ar">
+<!-- تم تغيير هذا السطر لإضافة كلاس 'light' افتراضياً لضمان البدء في الوضع الفاتح -->
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <title>Haider - Exception Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VOXA - وكالة فخمة وعصرية</title>
   <style>
-    /* تنسيق عام */
-    body {
-      margin: 0;
-      background-color: #121212;
-      color: #f1f1f1;
-      font-family: 'Arial', sans-serif;
-      direction: rtl;
-      line-height: 1.6;
-    }
+    /* * ---------- CYBER NEON ROOT & RESET (V6 - Default Light) ---------- */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600;700&display=swap');
     
-    header {
-      background: #1e1e1e;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 2px solid #d4af37; /* لمسة ذهبية */
+    :root{
+      /* Default to Dark Mode Variables */
+      --bg:#030712; 
+      --accent:#00F0FF; 
+      --accent-secondary: #FF5733; 
+      --accentGlow:0 0 10px var(--accent), 0 0 20px rgba(0,240,255,.5);
+      --fontH:'Orbitron',sans-serif;
+      --fontB:'Inter',sans-serif;
+      --text-color:#E5E7EB;
+      --card-bg:#0F172A; 
+      --dash-bg:rgba(0,240,255,.08);
+      --dash-border:rgba(0,240,255,.3);
     }
-    
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      color: #d4af37;
+    /* Light Mode Overrides (Applied via .light class on body) */
+    body.light{
+      --bg:#f8f9fa;
+      --accent:#007BFF; 
+      --accent-secondary: #00AFFF; 
+      --accentGlow:none; 
+      --text-color:#212529;
+      --card-bg:#ffffff;
+      --dash-bg:rgba(0,123,255,.1);
+      --dash-border:rgba(0,123,255,.5);
     }
+
+    /* Base Styling */
+    *{margin:0;padding:0;box-sizing:border-box;font-family:var(--fontB);}
+    body{background:var(--bg);color:var(--text-color);overflow-x:hidden;min-height:100vh;position:relative; transition: background .5s, color .5s;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;border:none;background:none;font:inherit;color:inherit;}
+
+    /* ---------- DYNAMIC BACKGROUND (Particle Flow) ---------- */
+    #particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
+    canvas{display:block;width:100%;height:100%;}
+
+    /* ---------- NAV BAR V6 ---------- */
+    nav{position:fixed;top:0;width:100%;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;z-index:1000; background: rgba(3, 7, 18, 0.7); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0,240,255,0.1); transition: background .5s;}
+    body.light nav{background: rgba(248, 249, 250, 0.8); border-bottom-color: rgba(0,123,255,0.3);}
+
+    .logo-group{display: flex; flex-direction: column; align-items: flex-end;}
+    .logo{font-family:var(--fontH);font-size:1.4rem;letter-spacing:3px;color:var(--accent);text-shadow:var(--accentGlow);}
+    .owner-name{font-size: 0.85rem; color: #7b8599; margin-top: -5px; transition: color .5s;}
+
+    /* ---------- THEME TOGGLE STYLING V6 ---------- */
+    .themeToggle{width:50px;height:24px;background:var(--card-bg);border-radius:24px;position:relative;transition:.5s;cursor:pointer; border: 1px solid var(--dash-border);}
+    /* Position for Dark Mode (right) */
+    .themeToggle::after{content:'';position:absolute;width:20px;height:20px;background:var(--accent);border-radius:50%;top:2px;right:2px;transition:.5s; box-shadow: var(--accentGlow);}
+    /* Toggle BG and After for Light Mode */
+    body.light .themeToggle{background:#ddd;}
+    body.light .themeToggle::after{transform:translateX(-26px);background:var(--accent);box-shadow: none;}
     
-    nav {
-      margin: 20px 0;
-      text-align: center;
+    /* ---------- HERO SECTION V6 ---------- */
+    .hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 1rem;}
+    .hero h1{font-family:var(--fontH);font-size:clamp(2.5rem,6vw,5rem);margin-bottom:1.5rem;text-shadow:var(--accentGlow);}
+    .hero p{font-size:1.3rem;margin-bottom:3rem;opacity:.9;}
+    .ctaWrap{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;}
+    
+    /* CTA Button Styles */
+    .cta{padding:.9rem 2.2rem;border:2px solid var(--accent);border-radius:8px;font-weight:700;transition:.3s;position:relative;overflow:hidden;color:var(--text-color); background: transparent;}
+    .cta:hover{background:var(--accent);color:var(--bg);box-shadow:var(--accentGlow); transform: translateY(-3px);}
+    .cta.secondary{border-color:#475569;color:#94a3b8; background: var(--card-bg);}
+    .cta.secondary:hover{background:#475569;color:#fff;border-color:#475569;box-shadow:none; transform: translateY(-3px);}
+    
+    /* Light Mode Button Colors */
+    body.light .cta{color:var(--text-color);border-color:var(--accent);}
+    body.light .cta:hover{background:var(--accent);color:#fff;border-color:var(--accent); box-shadow: 0 4px 10px rgba(0,123,255,0.3);}
+    body.light .cta.secondary{border-color:#ccc;color:#555; background: #eee;}
+
+    /* ---------- SECTIONS WRAPPER V6 ---------- */
+    main{position:relative;padding:6rem 1rem;max-width:1200px;margin:auto;}
+    section{display:none;animation:fadeIn .8s forwards;}
+    section.active{display:block;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    /* Titles */
+    .section-title{font-family:var(--fontH);margin-bottom:2.5rem;text-align:center;color:var(--accent); text-shadow: var(--accentGlow); font-size: 2.5rem;}
+    .section-subtitle{text-align:center; margin-bottom: 2rem; opacity: .8;}
+
+    /* ---------- GOAL DASHBOARD V6 (5 Metrics) ---------- */
+    .dash{background:var(--card-bg);border:1px solid var(--dash-border);border-radius:12px;padding:2.5rem;margin-bottom:4rem; box-shadow: 0 0 15px rgba(0,240,255,.15);}
+    .goal{margin-bottom:1.5rem;}
+    .goal label{display:flex;justify-content:space-between;margin-bottom:.5rem;font-size:1rem; font-weight: 600;}
+    .bar{height:12px;background:#1e293b;border-radius:6px;overflow:hidden;position:relative; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);}
+    .bar span{position:absolute;left:0;top:0;height:100%;background:var(--accent);box-shadow:var(--accentGlow);width:0;transition:width 1.5s ease-out; border-radius: 6px;}
+    body.light .bar{background:#e9ecef;}
+
+    /* ---------- MENTALITY MAP & SERVICES V6 ---------- */
+    .cards{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+    .card{background:var(--card-bg);border:1px solid var(--dash-border);padding:1.5rem;border-radius:8px;transition:.4s;transform-style:preserve-3d; color: var(--text-color); box-shadow: 0 4px 12px rgba(0,0,0,0.3);}
+    .card:hover{transform:translateY(-5px) scale(1.02);border-color:var(--accent);}
+    .card h3{font-family:var(--fontH);margin-bottom:.6rem;color:var(--accent); font-size: 1.2rem;}
+    .card p{opacity: .8;}
+    body.light .card{box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
+    
+    /* ---------- CONTACT / FORM STYLING V6 ---------- */
+    .lockContact{text-align:center;margin-top:3rem;}
+    .lockContact input{width:220px;padding:.8rem;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:6px;margin-left:.5rem; text-align: right; transition: .3s;}
+    .lockContact input:focus{outline:none; box-shadow: 0 0 8px var(--accent);}
+    .lockContact button{padding:.8rem 1.6rem;background:var(--accent);color:var(--bg);border-radius:6px; font-weight: 700; transition: .3s;}
+    
+    #contactForm, #business form{background:var(--card-bg);border:1px solid var(--dash-border);border-radius:8px;padding:2rem;margin-top:1.5rem; max-width: 600px; margin-left: auto; margin-right: auto;}
+    #contactForm input, #contactForm textarea, #business input, #business textarea{width:100%;padding:.8rem;margin:.6rem 0;background:var(--bg);border:1px solid #475569;border-radius:4px;color:var(--text-color);text-align: right; transition: .3s;}
+    #contactForm input:focus, #contactForm textarea:focus, #business input:focus, #business textarea:focus{outline:none; border-color: var(--accent); box-shadow: 0 0 5px rgba(0,240,255,.5);}
+    #contactForm button, #business button{background:var(--accent);color:var(--bg);padding:.8rem 1.6rem;border-radius:6px;font-weight:700;}
+    body.light #contactForm, body.light #business form{background:#fff;}
+    body.light #contactForm input, body.light #contactForm textarea, body.light #business input, body.light #business textarea{background:#f0f4f8;border-color:#ccc;color:#111;}
+    #contactForm{display:none;}
+    
+    /* ---------- AI CHAT BUTTON & WINDOW V6 (RADICALLY IMPROVED) ---------- */
+    .aiChat{position:fixed;bottom:25px;right:25px;width:60px;height:60px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:var(--accentGlow);z-index:1000;cursor:pointer; transition: .3s;}
+    .aiChat:hover{transform: scale(1.05); box-shadow: 0 0 15px var(--accent);}
+    .aiChat svg{width:32px;height:32px;stroke:var(--bg); fill: none; transition: .3s;} 
+    .chatWindow{position:fixed;bottom:100px;right:25px;width:360px;height:480px;background:var(--card-bg);border:2px solid var(--accent);border-radius:12px;display:none;flex-direction:column;z-index:1001;box-shadow:var(--accentGlow);}
+    body.light .chatWindow{box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+    
+    .chatHeader{padding:.8rem 1rem;background:var(--accent);color:var(--bg);font-weight:700;display:flex;justify-content:space-between;align-items:center; border-radius: 10px 10px 0 0; font-family: var(--fontH);}
+    .chatClose{cursor:pointer;font-size:1.5rem; line-height: 1;}
+    
+    .chatBody{flex:1;padding:1rem;overflow-y:auto;font-size:.95rem; line-height: 1.5; background: var(--bg);}
+    .chatBody div{direction: rtl; margin-bottom: 1rem;} 
+
+    /* Chat Messages Styling */
+    .msg-ai {
+        text-align: right;
+        background: var(--dash-bg); 
+        border-radius: 8px 8px 0 8px;
+        padding: 0.7rem;
+        border-left: 3px solid var(--accent);
+        color: var(--text-color);
     }
-    
-    nav a {
-      color: #d4af37;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-      transition: color 0.3s ease;
+    .msg-user {
+        text-align: left;
+        background: transparent;
+        padding: 0.7rem 0.5rem;
+        color: var(--text-color);
+        font-weight: 600;
+        opacity: 0.9;
     }
-    
-    nav a:hover {
-      color: #f1f1f1;
-    }
-    
-    section {
-      padding: 50px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    
-    .section-title {
-      text-align: center;
-      margin-bottom: 40px;
-      font-size: 2em;
-      color: #d4af37;
-    }
-    
-    /* معرض الأعمال */
-    .portfolio {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-    
-    .portfolio-item {
-      background: #1e1e1e;
-      padding: 10px;
-      border: 2px solid #d4af37;
-      border-radius: 5px;
-      text-align: center;
-    }
-    
-    .portfolio-item img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-    }
-    
-    /* نموذج الاتصال */
-    .contact-form {
-      max-width: 600px;
-      margin: auto;
-    }
-    
-    .contact-form input, .contact-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: none;
-      border-radius: 5px;
-    }
-    
-    .contact-form button {
-      background: #d4af37;
-      border: none;
-      color: #121212;
-      padding: 10px 20px;
-      font-size: 1em;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-    
-    .contact-form button:hover {
-      background: #b3982d;
-    }
-    
-    /* تذييل */
-    footer {
-      background: #1e1e1e;
-      text-align: center;
-      padding: 20px;
-      border-top: 2px solid #d4af37;
-    }
-    
-    /* نافذة الدردشة (مساعد Gemini) */
-    #chat {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 300px;
-      max-height: 400px;
-      background: #1e1e1e;
-      border: 2px solid #d4af37;
-      border-radius: 5px;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    #chat-header {
-      background: #d4af37;
-      padding: 10px;
-      color: #121212;
-      cursor: pointer;
-      text-align: center;
-    }
-    
-    #chat-body {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      display: none; /* يبدأ مغلق */
-      color: #f1f1f1;
-    }
-    
-    #chat-input {
-      border-top: 1px solid #d4af37;
-      display: flex;
-    }
-    
-    #chat-input input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      outline: none;
-    }
-    
-    #chat-input button {
-      background: #d4af37;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      color: #121212;
-    }
-    
-    /* استجابة الموقع */
-    @media (max-width: 768px) {
-      nav {
-        font-size: 0.9em;
-      }
-      
-      header h1 {
-        font-size: 2em;
-      }
-      
-      section {
-        padding: 30px 10px;
-      }
+
+    .msg-user b, .msg-ai b { color: var(--accent-secondary); font-family: var(--fontH);}
+    .chatBody small { display: block; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed rgba(255,255,255,.1); font-size: 0.75rem; color: #94a3b8 !important; text-align: left; direction: ltr;}
+    .chatBody small a { color: var(--accent) !important; text-decoration: none; transition: color .2s;}
+    .chatBody small a:hover { color: var(--accent-secondary) !important; text-decoration: underline;}
+
+    .chatInput{display:flex;padding:.8rem 1rem;border-top:1px solid var(--dash-border); background: var(--card-bg); border-radius: 0 0 10px 10px;}
+    .chatInput input{flex:1;padding:.6rem;background:var(--bg);border:1px solid #475569;border-radius:6px;color:var(--text-color); text-align: right; margin-left: .5rem;}
+    .chatInput button{padding:.6rem 1rem;background:var(--accent);color:var(--bg);border-radius:6px; font-weight: 700;}
+
+    /* ---------- RESPONSIVE V6 ---------- */
+    @media(max-width:768px){
+      nav{padding:1rem;}
+      .hero h1{font-size: 3rem;}
+      .ctaWrap{gap:1rem;}
+      .cards{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+      .chatWindow{width:95%;right:2.5%;bottom:90px;}
+      .aiChat{bottom:20px; right: 20px;}
+      main{padding: 4rem 1rem;}
     }
   </style>
 </head>
-<body>
+<!-- تم إضافة كلاس 'light' هنا لجعله الوضع الافتراضي -->
+<body class="light">
+  <div id="particles"><canvas id="canvas"></canvas></div>
 
-  <!-- الواجهة الرئيسية -->
-  <header id="home">
-    <h1>VOXA</h1>
-    <p style="margin:10px 0; font-size:1.2em;">مرحباً بكم في وكالة VOXA الفخمة والعصرية</p>
-    <nav>
-      <a href="#home">الرئيسية</a>
-      <a href="#about">من نحن</a>
-      <a href="#services">خدماتنا</a>
-      <a href="#portfolio">أعمالنا</a>
-      <a href="#contact">تواصل معنا</a>
-    </nav>
+  <nav>
+    <div class="logo-group">
+        <div class="logo">EXCEPTION MAKER</div>
+        <div class="owner-name">موقع Haider الشخصي</div> 
+    </div>
+    <div class="themeToggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle Theme"></div> 
+  </nav>
+
+  <header class="hero">
+    <h1>رجل الهدف</h1>
+    <p>مصمم غرافيك (Graphic Designer) وباحث عن التميز.</p>
+    <div class="ctaWrap">
+      <button class="cta" onclick="showView('vision')">الرؤية الشخصية</button>
+      <button class="cta secondary" onclick="showView('business')">الخدمات والتواصل</button>
+    </div>
   </header>
-  
-  <!-- من نحن -->
-  <section id="about">
-    <h2 class="section-title">من نحن</h2>
-    <p>
-      وكالة VOXA هي ذروة الاحترافية والابتكار، نسعى لتقديم حلول متكاملة تجمع بين التصميم الراقي والتكنولوجيا الحديثة مع رؤية واضحة لتجاوز توقعات عملائنا.
-    </p>
-  </section>
-  
-  <!-- خدماتنا -->
-  <section id="services">
-    <h2 class="section-title">خدماتنا</h2>
-    <ul>
-      <li>تصميم وتطوير المواقع الإلكترونية</li>
-      <li>تسويق رقمي متكامل</li>
-      <li>تحليل البيانات واستراتيجيات النمو</li>
-      <li>استشارات تكنولوجية وإبداعية</li>
-    </ul>
-  </section>
-  
-  <!-- أعمالنا -->
-  <section id="portfolio">
-    <h2 class="section-title">أعمالنا</h2>
-    <div class="portfolio">
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/250x150?text=مشروع+1" alt="مشروع 1">
-        <p>مشروع 1 - وصف مختصر للعمل المبدع</p>
+
+  <main>
+    <section id="vision" class="active">
+      <h2 class="section-title">Goal Dashboard</h2>
+      
+      <div class="dash">
+        
+        <!-- Goal 1: اللياقة البدنية (40%) -->
+        <div class="goal">
+          <label><span>اللياقة البدنية</span><span data-value="40">0%</span></label>
+          <div class="bar"><span data-width="40"></span></div>
+        </div>
+
+        <!-- Goal 2: المشروع الفني (70%) -->
+        <div class="goal">
+          <label><span>المشروع الفني</span><span data-value="70">0%</span></label>
+          <div class="bar"><span data-width="70"></span></div>
+        </div>
+
+        <!-- Goal 3: التحدي الفكري (87%) -->
+        <div class="goal">
+          <label><span>التحدي الفكري</span><span data-value="87">0%</span></label>
+          <div class="bar"><span data-width="87"></span></div>
+        </div>
+
+        <!-- NEW Goal 4: إتقان الأدوات التقنية (90%) -->
+        <div class="goal">
+          <label><span>إتقان الأدوات التقنية (Design Software Mastery)</span><span data-value="90">0%</span></label>
+          <div class="bar"><span data-width="90"></span></div>
+        </div>
+
+        <!-- NEW Goal 5: الاحترافية في التسليم (80%) -->
+        <div class="goal">
+          <label><span>الاحترافية في التسليم (Delivery Professionalism)</span><span data-value="80">0%</span></label>
+          <div class="bar"><span data-width="80"></span></div>
+        </div>
       </div>
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/250x150?text=مشروع+2" alt="مشروع 2">
-        <p>مشروع 2 - وصف مختصر للعمل المبدع</p>
+
+      <h2 class="section-title">The Mentality</h2>
+      <p class="section-subtitle">المبادئ الأساسية التي تحكم العمل والحياة.</p>
+      
+      <div class="cards">
+        <div class="card">
+          <h3>الانضباط الذاتي</h3>
+          <p>الالتزام بالروتين اليومي دون رقيب خارجي هو مفتاح النجاح المستدام.</p>
+        </div>
+        <div class="card">
+          <h3>التعليم المستمر</h3>
+          <p>السعي لتطوير المهارات والمعرفة كل يوم بنسبة 1%، فالتوقف يعني التراجع.</p>
+        </div>
+        <div class="card">
+          <h3>صنع الاستثناء</h3>
+          <p>لا نتبع المعايير، بل نضع معاييرنا الخاصة لنتجاوز التوقعات في أي سياق.</p>
+        </div>
+        <div class="card">
+          <h3>التركيز على الهدف</h3>
+          <p>كل قرار يُقاس بمدى قربه من الإنجاز النهائي، لا تشتيت.</p>
+        </div>
+        <!-- Designer-Focused Cards -->
+        <div class="card">
+          <h3>التفكير الإبداعي</h3>
+          <p>نكسر القوالب النمطية لإنتاج حلول مرئية فريدة ومؤثرة.</p>
+        </div>
+        <div class="card">
+          <h3>الجودة أولاً</h3>
+          <p>التفاصيل الدقيقة هي الفارق بين العمل الجيد والعمل الاستثنائي الخالد.</p>
+        </div>
+        <div class="card">
+          <h3>إدارة المشاريع</h3>
+          <p>تنظيم الوقت والموارد لضمان تسليم الأعمال في مواعيدها وبكفاءة.</p>
+        </div>
+        <div class="card">
+          <h3>المرونة والاستجابة</h3>
+          <p>التكيف مع متطلبات العملاء والتغذية الراجعة بمهنية عالية وفعالية.</p>
+        </div>
       </div>
-      <div class="portfolio-item">
-        <img src="https://via.placeholder.com/250x150?text=مشروع+3" alt="مشروع 3">
-        <p>مشروع 3 - وصف مختصر للعمل المبدع</p>
+
+      <div class="lockContact">
+        <p>هل تمتلك مفتاح الاتصال السري؟</p>
+        <input id="passKey" type="password" placeholder="أدخل الرمز" maxlength="3">
+        <button onclick="checkPass()">فتح الاتصال</button> 
       </div>
-      <!-- يمكنك إضافة المزيد من المشاريع -->
-    </div>
-  </section>
-  
-  <!-- تواصل معنا -->
-  <section id="contact">
-    <h2 class="section-title">تواصل معنا</h2>
-    <div class="contact-form">
-      <form id="contactForm">
-        <input type="text" name="name" placeholder="الاسم" required>
-        <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-        <textarea name="message" rows="5" placeholder="رسالتك" required></textarea>
-        <button type="submit">إرسال</button>
-      </form>
-      <div style="margin-top: 20px;">
-        <p>هاتف: \٠١٠-12345678</p>
-        <p>البريد الإلكتروني: info@voxa.com</p>
-        <p>مواقع التواصل الاجتماعي:
-          <a href="#" style="color:#d4af37;">Facebook</a> |
-          <a href="#" style="color:#d4af37;">Twitter</a> |
-          <a href="#" style="color:#d4af37;">Instagram</a>
-        </p>
+      <div id="contactForm">
+        <form onsubmit="sendMessage(event)">
+          <input type="text" placeholder="الاسم" required>
+          <input type="email" placeholder="البريد الإلكتروني" required>
+          <textarea rows="4" placeholder="الرسالة" required></textarea>
+          <button type="submit">إرسال الرسالة السرية</button>
+        </form>
       </div>
-    </div>
-  </section>
-  
-  <!-- تذييل الموقع -->
-  <footer>
-    <p>&copy; 2025 VOXA. جميع الحقوق محفوظة.</p>
-  </footer>
-  
-  <!-- نافذة دردشة المساعد الذكي (Gemini) -->
-  <div id="chat">
-    <div id="chat-header">
-      دردشة المساعد
-    </div>
-    <div id="chat-body">
-      <!-- هنا يتم عرض المحادثة بشكل ديناميكي -->
-      <p style="margin: 0;">مرحباً! كيف يمكنني مساعدتك اليوم؟</p>
-    </div>
-    <div id="chat-input">
-      <input type="text" id="chatMessage" placeholder="اكتب رسالتك...">
-      <button id="sendChat">إرسال</button>
-    </div>
+    </section>
+
+    <section id="business">
+      <h2 class="section-title">الخدمات والتواصل</h2>
+      <p class="section-subtitle">أنا Haider، مصمم غرافيك متخصص في بناء الهويات البصرية القوية.</p>
+      
+      <h3 style="text-align:center;margin-bottom:1.5rem;font-family:var(--fontH);color:var(--accent);">الخدمات الأساسية</h3>
+      <div class="cards" style="margin-bottom: 3rem;">
+        <div class="card">
+          <h3>تصميم الشعارات (Logo Design)</h3>
+          <p>بناء شعارات خالدة ومبتكرة تعكس بوضوح قيم ورؤية علامتك التجارية.</p>
+        </div>
+        <div class="card">
+          <h3>تطوير الهوية البصرية</h3>
+          <p>إنشاء دليل متكامل للعلامة التجارية (Branding) يشمل الخطوط والألوان والأنماط.</p>
+        </div>
+        <div class="card">
+          <h3>الحملات الإعلانية الرقمية</h3>
+          <p>تصميم إعلانات ومنشورات جاذبة ومعدلة لمنصات السوشيال ميديا ووسائل الإعلام.</p>
+        </div>
+        <div class="card">
+          <h3>تنسيق المطبوعات والمحتوى</h3>
+          <p>تصميم احترافي للكتيبات، التقارير، العروض التقديمية والملفات القابلة للطباعة.</p>
+        </div>
+      </div>
+
+      <h3 style="text-align:center;margin-bottom:1.5rem;font-family:var(--fontH);color:var(--accent);">لماذا تختار Haider؟</h3>
+      <div class="cards" style="margin-bottom: 3rem;">
+        <div class="card">
+            <h3>الإتقان التقني</h3>
+            <p>استخدام أحدث برامج وأدوات التصميم لضمان أعلى مستويات الدقة والجودة في الإخراج النهائي.</p>
+        </div>
+        <div class="card">
+            <h3>الاحترافية في التعامل</h3>
+            <p>الالتزام بالمواعيد، وتقديم تحديثات منتظمة، والتعامل بمرونة مع التعديلات المطلوبة.</p>
+        </div>
+        <div class="card">
+            <h3>الفهم الاستراتيجي</h3>
+            <p>لا نصمم فقط، بل نفهم أهدافك التسويقية لإنشاء تصاميم تحقق نتائج ملموسة.</p>
+        </div>
+      </div>
+
+
+      <div style="text-align:center;">
+        <p>للشراكات والمشاريع، تواصل عبر النموذج أدناه:</p>
+        <form onsubmit="sendMessage(event)">
+          <input type="text" placeholder="الاسم الكامل" required>
+          <input type="email" placeholder="البريد الإلكتروني" required>
+          <input type="text" placeholder="المشروع / نوع الخدمة المطلوبة">
+          <textarea rows="4" placeholder="تفاصيل الاستفسار (الرجاء الشرح بالتفصيل)" required></textarea>
+          <button type="submit">طلب عرض سعر</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- AI CHAT WINDOW V6 -->
+  <div class="aiChat" onclick="toggleChat()" aria-label="Open AI Chat"> 
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 20L14 20" />
+        <path d="M12 17L12 20" />
+        <rect x="5" y="4" width="14" height="13" rx="2" ry="2" />
+        <path d="M15 9L9 9" />
+        <path d="M9 13L15 13" />
+    </svg>
   </div>
-  
+  <div class="chatWindow" id="chatWin">
+    <div class="chatHeader">Gemini AI - M.A.K.E.R <span class="chatClose" onclick="toggleChat()">×</span></div>
+    <div class="chatBody" id="chatBody">
+        <div class="msg-ai">
+            <b>Gemini:</b> مرحباً Haider، أنا مساعدك الذكي M.A.K.E.R (Mentality & Knowledge Engine for والرؤية). كيف يمكنني دعم رؤيتك اليوم؟
+        </div>
+    </div>
+    <form class="chatInput" onsubmit="askGemini(event)">
+      <input id="chatInp" type="text" placeholder="اطرح سؤالك عن الرؤية أو خدمات التصميم..." required>
+      <button type="submit">إرسال</button>
+    </form>
+  </div>
+
   <script>
-    // إظهار وإخفاء نافذة الدردشة عند النقر على رأس الدردشة
-    const chatHeader = document.getElementById('chat-header');
-    const chatBody = document.getElementById('chat-body');
-    chatHeader.addEventListener('click', () => {
-      chatBody.style.display = chatBody.style.display === 'none' || chatBody.style.display === '' ? 'block' : 'none';
-    });
+    /* Global Constants for Gemini API */
+    const MODEL_NAME = 'gemini-2.5-flash-preview-09-2025';
+    const apiKey = ""; 
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+
+    /* System Instruction V6: Updated for Graphic Design services */
+    const geminiSystemPrompt = "Act as a highly professional, visionary, and supportive AI assistant named M.A.K.E.R (Mentality & Knowledge Engine for والرؤية). Your role is to provide inspiration, strategic guidance, and high-impact responses. You must support the 'EXCEPTION MAKER' project's themes (self-discipline, continuous learning, making the exception) and articulate Haider's value proposition as a professional Graphic Designer specialized in Logo, Branding, and Ads. Respond concisely, exclusively in professional, clear Arabic, using appropriate Markdown for formatting (bolding key concepts).";
     
-    // محاكاة إرسال رسالة ودعم تقنية Gemini (يفترض وجود API مفتاح gemini وربطه في مكان ما)
-    const sendChatBtn = document.getElementById('sendChat');
-    sendChatBtn.addEventListener('click', () => {
-      const chatMessage = document.getElementById('chatMessage').value;
-      if(chatMessage.trim() === '') return;
-      
-      // إضافة رسالة المستخدم إلى نافذة الدردشة
-      const userMsg = document.createElement('p');
-      userMsg.style.textAlign = 'right';
-      userMsg.style.margin = '5px 0';
-      userMsg.textContent = chatMessage;
-      chatBody.appendChild(userMsg);
-      
-      // هنا تقوم بإرسال الرسالة إلى API الخاص بـ Gemini باستخدام مفتاح gemini
-      // مثال بسيط باستخدام fetch (تأكد من استبدال URL والمفتاح بمعلوماتك الحقيقية)
-      fetch('https://api.gemini.example/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'AIzaSyDJH9dkE3Yczn3npRPgn7_71_VFE5bsLdg'
-        },
-        body: JSON.stringify({ message: chatMessage })
-      })
-      .then(response => response.json())
-      .then(data => {
-        // عرض الرد من المساعد
-        const botMsg = document.createElement('p');
-        botMsg.style.textAlign = 'left';
-        botMsg.style.margin = '5px 0';
-        botMsg.textContent = data.reply || "لم يتم استلام رد.";
-        chatBody.appendChild(botMsg);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        const errorMsg = document.createElement('p');
-        errorMsg.style.textAlign = 'left';
-        errorMsg.style.margin = '5px 0';
-        errorMsg.textContent = "حدث خطأ أثناء إرسال الرسالة.";
-        chatBody.appendChild(errorMsg);
-      });
-      
-      // مسح حقل الإدخال بعد الإرسال
-      document.getElementById('chatMessage').value = '';
-    });
-    
-    // نموذج الاتصال: منع إعادة التحميل عند الإرسال (يمكن ربطه بـ AJAX)
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('تم إرسال رسالتك بنجاح!');
-      // قم بمعالجة الرسالة وإرسالها إلى الخادم حسب الحاجة
-      this.reset();
-    });
-  </script>
-</body>
-</html>
+    // Simple state management for chat history
+    let chatHistory = [];
+    chatHistory.push({ role: "model", text: "مرحباً Haider، أنا مساعدك الذكي M.A.K.E.R (Mentality & Knowledge Engine for والرؤية). كي
