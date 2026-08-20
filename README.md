@@ -1,80 +1,31 @@
-# VOXA - وكالة الإبداع والتميز
+# VOXA Portfolio Platform
 
-![VOXA Logo](https://img.shields.io/badge/VOXA-Agency-d4af37?style=for-the-badge&logo=star&logoColor=white)
+A cinematic multi-tenant portfolio platform built for digital creators with TanStack Start + Lovable Cloud (Postgres/RLS/Auth/Storage).
 
-موقع إلكتروني فخم ومتطور لوكالة VOXA المتخصصة في التسويق الرقمي والخدمات الإبداعية.
+## Architecture
 
-## 🌟 المميزات الرئيسية
+- `src/start.ts` — global request middleware, CSRF, tenant context
+- `src/server/tenant.ts` — hostname → tenant resolver
+- `src/server/data.ts` — typed server functions and public portfolio reads
+- `src/server/supabase.ts` — server-side Supabase/Lovable Cloud client with cookie session support
+- `src/components/SmartGrid.tsx` — media-first masonry grid
+- `src/routes/*` — TanStack file-based routes
+- `supabase/migrations/0001_voxa.sql` — schema + RLS + storage bucket
 
-- **تصميم فخم وعصري** مع لوحة ألوان داكنة ولمسات ذهبية
-- **تصميم متجاوب** يعمل بشكل مثالي على جميع الأجهزة
-- **مساعد ذكي** مدمج بتقنية Gemini AI
-- **تأثيرات بصرية متقدمة** مع رسوم متحركة سلسة
-- **واجهة مستخدم بديهية** باللغة العربية
-- **خلفية جسيمات متحركة** لإضافة لمسة بصرية مميزة
+## Environment
 
-## 📱 الأقسام المتوفرة
+Set:
 
-### 1. الصفحة الرئيسية (Hero Section)
-- شعار VOXA مع تأثيرات نصية متدرجة
-- عبارة ترحيبية جذابة
-- زر دعوة للعمل (CTA)
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `PLATFORM_HOST`
 
-### 2. من نحن (About)
-- نبذة عن الوكالة ورؤيتها
-- تصميم نظيف ومقروء
+The Lovable Cloud project should expose the same Supabase-compatible URL/key pair. The database schema is intentionally Postgres/RLS-first because Lovable Cloud uses Postgres and Supabase-specific services underneath. See Lovable security guidance and TanStack Start server-function/middleware docs.
 
-### 3. خدماتنا (Services)
-- شبكة من 6 خدمات رئيسية:
-  - 🔊 التسويق الرقمي
-  - 🎨 التصميم الإبداعي
-  - 💻 تطوير المواقع
-  - 📊 تحليل البيانات
-  - 👥 إدارة المحتوى
-  - 📱 تطبيقات الهاتف
+## Tenant resolution
 
-### 4. أعمالنا (Portfolio)
-- معرض لأبرز الأعمال السابقة
-- 6 مشاريع متنوعة مع أوصاف تفصيلية
-- تأثيرات تفاعلية عند التمرير
+- Production subdomain: `username.<PLATFORM_HOST>`
+- Custom domain: verified record in `portfolio_domains`
+- Local/preview fallback: `/u/:username`
 
-### 5. تواصل معنا (Contact)
-- نموذج اتصال تفاعلي
-- معلومات الاتصال الكاملة
-- روابط مواقع التواصل الاجتماعي
-
-## 🤖 المساعد الذكي
-
-### المميزات:
-- واجهة دردشة أنيقة ومتطورة
-- يدعم تقنية Google Gemini AI
-- يمكن الوصول إليه من أي صفحة
-- تصميم متجاوب للهواتف المحمولة
-
-### كيفية الإعداد:
-1. احصل على مفتاح API من Google AI Studio
-2. استبدل `'YOUR_GEMINI_API_KEY'` بمفتاحك الفعلي في الكود
-3. تأكد من تفعيل الخدمة في لوحة تحكم Google Cloud
-
-## 🛠️ التقنيات المستخدمة
-
-### Frontend:
-- **HTML5** - هيكل الموقع
-- **CSS3** - التصميم والتأثيرات البصرية
-- **JavaScript (ES6+)** - التفاعل والوظائف الديناميكية
-- **Font Awesome** - الأيقونات
-- **Google Fonts** - خط Tajawal العربي
-
-### تقنيات CSS المتقدمة:
-- CSS Grid & Flexbox للتخطيط
-- CSS Gradients للخلفيات المتدرجة
-- CSS Animations & Transitions
-- Backdrop Filter للتأثيرات الزجاجية
-- CSS Custom Properties (Variables)
-
-### المكتبات الخارجية:
-- Google Gemini AI SDK
-- Font Awesome Icons
-- Google Fonts (Tajawal)
-
-## 📁 هيكل المشروع
+Real wildcard DNS and custom domains still require the hosting/DNS layer. Lovable documents native custom domain support, while the application-side resolver remains data-driven.
